@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { YoutubeTranscript } from 'youtube-transcript';
 
 interface VideoSnippet {
   title: string;
@@ -57,19 +58,28 @@ export const fetchVideoData = async (videoId: string): Promise<VideoSnippet> => 
       .replace('M', ' minutes ')
       .replace('S', ' seconds');
 
-    // Combine all information without transcript
+    // Get video transcript
+    let transcript = '';
+    try {
+      const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId);
+      transcript = transcriptItems.map(item => item.text).join(' ');
+    } catch {
+      console.log('No transcript available, using description only');
+    }
+
+    // Combine transcript with other information
     const fullContent = `
       Title: ${videoData.title}
-      Channel: ${videoData.channelTitle}
-      Language: ${language}
-      Published: ${new Date(videoData.publishedAt).toLocaleDateString()}
-      Duration: ${formattedDuration}
-      Views: ${parseInt(statistics.viewCount).toLocaleString()}
-      Likes: ${parseInt(statistics.likeCount).toLocaleString()}
-      Comments: ${parseInt(statistics.commentCount).toLocaleString()}
+      
+      Transcript:
+      ${transcript}
       
       Description:
       ${videoData.description}
+      
+      Views: ${parseInt(statistics.viewCount).toLocaleString()}
+      Likes: ${parseInt(statistics.likeCount).toLocaleString()}
+      Comments: ${parseInt(statistics.commentCount).toLocaleString()}
       
       Tags: ${videoData.tags ? videoData.tags.join(', ') : 'No tags'}
     `;
@@ -77,6 +87,7 @@ export const fetchVideoData = async (videoId: string): Promise<VideoSnippet> => 
     return {
       ...videoData,
       description: fullContent,
+      transcript,
       statistics,
       duration: formattedDuration,
       tags: videoData.tags || [],
