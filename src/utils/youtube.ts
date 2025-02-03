@@ -33,8 +33,8 @@ export const fetchVideoData = async (videoId: string) => {
         try {
           console.log(`Attempting to fetch transcript, attempt ${4 - retries}`);
           
-          // Create a new instance and get transcript
-          const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId);
+          // Use getTranscript instead of fetchTranscript
+          const transcriptItems = await YoutubeTranscript.getTranscript(videoId);
           
           if (transcriptItems && transcriptItems.length > 0) {
             transcriptText = transcriptItems
