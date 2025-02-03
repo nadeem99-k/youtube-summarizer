@@ -89,9 +89,13 @@ ${text}
           throw new Error('Summary too short or empty');
           
         } catch (error: unknown) {
-          const modelError = error as { response?: { status?: number }, message?: string };
+          const modelError = error as { response?: { status: number }, message?: string };
           console.error(`Error with model ${model}, attempt ${4 - retries}:`, modelError.message);
-          lastError = modelError;
+          
+          // Only assign to lastError if status exists
+          if (modelError.response?.status) {
+            lastError = { response: { status: modelError.response.status } };
+          }
           retries--;
 
           if (modelError.response?.status === 429) {
