@@ -39,15 +39,17 @@ ${cleanText.slice(0, 1000)}
         .filter(Boolean)
         .join('\n\n');
 
-    } catch (apiError: any) {
+    } catch (apiError: unknown) {
       console.error('API Error:', apiError);
       
-      if (apiError.code === 'ECONNABORTED') {
+      const error = apiError as { code?: string; response?: { status: number } };
+      
+      if (error.code === 'ECONNABORTED') {
         throw new Error('Request timed out. Please try again.');
       }
       
-      if (apiError.response) {
-        switch (apiError.response.status) {
+      if (error.response) {
+        switch (error.response.status) {
           case 429:
             throw new Error('Too many requests. Please wait a moment and try again.');
           case 500:
@@ -55,14 +57,17 @@ ${cleanText.slice(0, 1000)}
           case 503:
             throw new Error('Service temporarily unavailable. Please try again later.');
           default:
-            throw new Error(`Summarization failed (${apiError.response.status}). Please try again.`);
+            throw new Error(`Summarization failed (${error.response.status}). Please try again.`);
         }
       }
       
       throw new Error('Network error. Please check your connection and try again.');
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Summarization error:', error);
-    throw error; // Preserve the original error message
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error('An unexpected error occurred during summarization');
   }
 }; 
