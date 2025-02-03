@@ -39,19 +39,15 @@ export default function Summarizer() {
     try {
       const videoId = extractVideoId(url);
       if (!videoId) {
-        throw new Error('Invalid YouTube URL. Please check the URL and try again.');
+        throw new Error('Invalid YouTube URL');
       }
 
       const data = await fetchVideoData(videoId);
       setVideoData(data);
 
-      const textToSummarize = data.description || 'No description available for this video.';
+      // Use transcript if available, otherwise use description
+      const textToSummarize = data.transcript || data.description;
       const summary = await generateSummary(textToSummarize);
-      
-      if (!summary) {
-        throw new Error('Failed to generate summary. Please try again.');
-      }
-
       setSummary(summary);
     } catch (err) {
       console.error('Error:', err);
