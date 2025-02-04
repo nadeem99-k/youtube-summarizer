@@ -20,9 +20,9 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
+    <nav className="fixed top-0 left-0 right-0 z-[100] bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 shadow-lg">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="relative flex items-center justify-between h-16">
           {/* Logo */}
           <Link 
             href="/" 
@@ -34,6 +34,7 @@ export default function Navbar() {
               width={32}
               height={32}
               className="rounded-lg object-cover"
+              priority
             />
             <span className="bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">
               YouTube Summarizer
@@ -42,15 +43,10 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="nav-link">Home</Link>
-            <Link href="/summarizer" className="nav-link">Summarizer</Link>
-            <Link href="/about" className="nav-link">About</Link>
-            <Link 
-              href="/summarizer" 
-              className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
-            >
-              Get Started
-            </Link>
+            <Link href="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
+            <Link href="/summarizer" className="text-gray-300 hover:text-white transition-colors">Summarizer</Link>
+            <Link href="/clips" className="text-gray-300 hover:text-white transition-colors">Video Clips</Link>
+            <Link href="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -76,7 +72,7 @@ export default function Navbar() {
           id="mobile-menu"
           className={`${
             isMobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-          } md:hidden fixed top-16 right-0 bottom-0 w-64 bg-gray-900 transform transition-all duration-300 ease-in-out shadow-xl`}
+          } md:hidden fixed top-16 right-0 bottom-0 w-64 bg-gray-900/95 backdrop-blur-sm transform transition-all duration-300 ease-in-out shadow-xl z-50`}
         >
           <div className="flex flex-col p-4 space-y-4">
             <Link 
@@ -94,21 +90,19 @@ export default function Navbar() {
               Summarizer
             </Link>
             <Link 
+              href="/clips" 
+              className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Video Clips
+            </Link>
+            <Link 
               href="/about" 
               className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               About
             </Link>
-            <div className="pt-4 border-t border-gray-800">
-              <Link 
-                href="/summarizer" 
-                className="block w-full px-4 py-2 text-center bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Get Started
-              </Link>
-            </div>
           </div>
         </div>
       </div>
