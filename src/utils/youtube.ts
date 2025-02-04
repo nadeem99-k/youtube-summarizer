@@ -33,8 +33,11 @@ export const fetchVideoData = async (videoId: string) => {
         try {
           console.log(`Attempting to fetch transcript, attempt ${4 - retries}`);
           
-          // Use fetchTranscript to get video captions
-          const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId);
+          // Add better error handling for transcript fetch
+          const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId).catch((err) => {
+            console.warn('Transcript fetch error:', err);
+            return null;
+          });
           
           if (transcriptItems && transcriptItems.length > 0) {
             transcriptText = transcriptItems

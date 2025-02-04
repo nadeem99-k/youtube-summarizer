@@ -179,42 +179,65 @@ export default function Summarizer() {
 
           {/* Summary Result */}
           {summary && (
-            <div className="bg-gray-800/50 rounded-lg p-4 md:p-6">
-              <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">
+            <div className="bg-gray-800/50 rounded-xl p-6 backdrop-blur-sm border border-gray-700 hover:border-purple-500/50 transition-all duration-300">
+              <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text flex items-center gap-3">
+                <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
                 AI-Generated Summary
               </h2>
-              <div className="bg-gray-900/50 rounded-lg p-4 md:p-6 border border-gray-700">
-                <div className="text-gray-300 prose prose-invert max-w-none break-words">
+
+              <div className="bg-gray-900/50 rounded-xl p-6 border border-gray-700 space-y-4">
+                <div className="prose prose-invert max-w-none">
                   {summary.split('\n').map((paragraph, index) => (
-                    <p 
-                      key={index} 
-                      className={`mb-4 leading-relaxed whitespace-pre-wrap ${
-                        index === 0 ? 'text-base md:text-lg font-medium text-purple-300' : 'text-sm md:text-base text-gray-300'
-                      }`}
+                    <div 
+                      key={index}
+                      className={`mb-4 animate-fade-in`}
+                      style={{ animationDelay: `${index * 0.1}s` }}
                     >
-                      {paragraph.trim()}
-                    </p>
+                      {index === 0 ? (
+                        <h3 className="text-lg font-medium text-purple-300 mb-3">
+                          Key Takeaways
+                        </h3>
+                      ) : null}
+                      <p className={`leading-relaxed ${
+                        index === 0 
+                          ? 'text-base md:text-lg font-medium text-gray-200'
+                          : 'text-sm md:text-base text-gray-300'
+                      }`}>
+                        {index === 0 ? '🎯 ' : '• '}{paragraph.trim()}
+                      </p>
+                    </div>
                   ))}
                 </div>
-                
-                <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-700">
+
+                <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-6 border-t border-gray-700">
                   <button
                     onClick={() => navigator.clipboard.writeText(summary)}
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 rounded-lg transition-colors text-sm font-medium group"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                     </svg>
                     Copy Summary
                   </button>
                   <button
                     onClick={() => window.print()}
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 bg-pink-500/10 hover:bg-pink-500/20 text-pink-300 rounded-lg transition-colors text-sm font-medium group"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>
-                    Print
+                    Save as PDF
+                  </button>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-500/10 hover:bg-gray-500/20 text-gray-300 rounded-lg transition-colors text-sm font-medium group"
+                  >
+                    <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    New Summary
                   </button>
                 </div>
               </div>

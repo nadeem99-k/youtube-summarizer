@@ -1,0 +1,18 @@
+{
+  "name": "YouTube Summarizer",
+  "short_name": "YT Summary",
+  "description": "AI-powered YouTube video summarizer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#1a1a1a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/og-image.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+} 
